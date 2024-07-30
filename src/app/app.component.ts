@@ -1,7 +1,7 @@
-import { Component } from '@angular/core';
-import {CdsIcon, detailsIcon} from "@cds/core/icon";
+import {Component} from '@angular/core';
+import {ClarityIcons, detailsIcon} from "@cds/core/icon";
 
-CdsIcon.bind(detailsIcon);
+ClarityIcons.addIcons(detailsIcon);
 
 @Component({
   selector: 'app-root',
@@ -10,4 +10,13 @@ CdsIcon.bind(detailsIcon);
 })
 export class AppComponent {
   title = 'Config DSL';
+
+  compiled = '';
+
+  onInputChanged(value: string) {
+    console.log(value);
+    // TODO: implement translation
+    this.compiled = value;
+  }
+
 }

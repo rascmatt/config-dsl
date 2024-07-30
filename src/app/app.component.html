@@ -3,13 +3,21 @@
     <div class="branding">
       <a routerLink="/">
         <cds-icon shape="details"></cds-icon>
-        <span class="title">{{title}}</span>
+        <span class="title">{{ title }}</span>
       </a>
     </div>
   </header>
   <div class="content-container">
     <div class="content-area">
-      <router-outlet></router-outlet>
+
+      <div class="clr-row content">
+        <div class="clr-col-6">
+          <app-dsl-editor [title]="'Config DSL'" (valueChange)="onInputChanged($event)"></app-dsl-editor>
+        </div>
+        <div class="clr-col-6">
+          <app-dsl-editor [title]="'Metadata'" [value]="compiled"></app-dsl-editor>
+        </div>
+      </div>
     </div>
   </div>
 </div>
