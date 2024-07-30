@@ -1,5 +1,9 @@
 import {ActionDict} from "ohm-js";
 
+// Stack to keep track of the current property being processed, as Ohm doesn't provide a way to pass context to the
+// semantics.
+const pStack: string[] = [];
+
 /**
  * Visitor to transform the Ohm CST to an object according to the semantics of the configuration metadata DSL.
  */
@@ -16,14 +20,20 @@ export const semantics: ActionDict<any> = {
     }
 
     const properties = props['metadata'];
-    const validations = [];
+    const validations: any[] = [];
 
-    for (const property of properties) {
-      if (property.validation) {
-        validations.push(property.validation);
-        delete property.validation;
+    const extractValidations = (props: any[]) => {
+      for (const property of props) {
+        if (property.validation) {
+          validations.push(property.validation);
+          delete property.validation;
+        }
+        if (property.subAttributes) {
+          extractValidations(property.subAttributes);
+        }
       }
     }
+    extractValidations(properties);
 
 
     const result: any = {
@@ -51,7 +61,7 @@ export const semantics: ActionDict<any> = {
       ],
       multiplicity,
       type: configType,
-      attributes: props['metadata'],
+      attributes: properties,
       usedByApplications: [],
     }
 
@@ -67,7 +77,6 @@ export const semantics: ActionDict<any> = {
   },
 
   Property: (name, type, validation, subProps) => {
-
     const t = type['metadata']?.[0] || {type: 'STRING'};
 
     // Infer the type if it's a multi property
@@ -75,6 +84,7 @@ export const semantics: ActionDict<any> = {
       t.type = 'MULTI_PROPERTY';
     }
 
+    pStack.push(name.sourceString);
     const result: any = {
       name: name.sourceString,
       dataType: t.type
@@ -85,24 +95,22 @@ export const semantics: ActionDict<any> = {
     }
 
     if (t.type === 'MULTI_PROPERTY') {
-      result['subAttributes'] = subProps['metadata'];
+      result['subAttributes'] = subProps['metadata']?.[0] || [];
     }
 
     if (validation.sourceString) {
+      validation['args'] = {attribute: name.sourceString};
       result['validation'] = validation['metadata'];
-      // Set the attribute name for the validation
-      for (const v of validation['metadata']) {
-        v["attribute"] = name.sourceString;
-      }
     }
 
+    pStack.pop();
     return result;
   },
 
   Validation: (value) => {
     return {
       type: value.sourceString.toUpperCase(),
-      attribute: '' // Will be set by the parent node
+      attribute: pStack.join('/')
     };
   },
 
