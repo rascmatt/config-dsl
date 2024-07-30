@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {CdsIcon, detailsIcon} from "@cds/core/icon";
+
+CdsIcon.bind(detailsIcon);
 
 @Component({
   selector: 'app-root',
@@ -6,5 +9,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'config-dsl';
+  title = 'Config DSL';
 }
