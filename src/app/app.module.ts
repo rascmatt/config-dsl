@@ -5,12 +5,12 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ClarityModule} from "@clr/angular";
-import {DslEditorComponent} from "./dsl-editor/dsl-editor.component";
+import {EditorComponent} from "./editor/editor.component";
 
 @NgModule({
   declarations: [
     AppComponent,
-    DslEditorComponent
+    EditorComponent
   ],
   imports: [
     BrowserModule,

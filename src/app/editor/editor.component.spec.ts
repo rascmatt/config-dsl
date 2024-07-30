@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DslEditorComponent } from './dsl-editor.component';
+import { EditorComponent } from './editor.component';
 
 describe('DslEditorComponent', () => {
-  let component: DslEditorComponent;
-  let fixture: ComponentFixture<DslEditorComponent>;
+  let component: EditorComponent;
+  let fixture: ComponentFixture<EditorComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DslEditorComponent]
+      imports: [EditorComponent]
     })
     .compileComponents();
-    
-    fixture = TestBed.createComponent(DslEditorComponent);
+
+    fixture = TestBed.createComponent(EditorComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

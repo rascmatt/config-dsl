@@ -12,10 +12,11 @@
 
       <div class="clr-row content">
         <div class="clr-col-6">
-          <app-dsl-editor [title]="'Config DSL'" (valueChange)="onInputChanged($event)"></app-dsl-editor>
+          <app-editor [title]="'Config DSL'" [mode]="'ace/mode/mydsl'"
+                          (valueChange)="onInputChanged($event)"></app-editor>
         </div>
         <div class="clr-col-6">
-          <app-dsl-editor [title]="'Metadata'" [value]="compiled"></app-dsl-editor>
+          <app-editor [title]="'Metadata'" [value]="translated"></app-editor>
         </div>
       </div>
     </div>

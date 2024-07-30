@@ -1,27 +1,158 @@
-# ConfigDsl
+# Configuration DSL Documentation
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.1.4.
+## Overview
 
-## Development server
+The Configuration DSL allows for the concise creation of configuration values, which are then transformed into the Configuration Metadata DSL (in JSON format). This document provides an overview of the grammar and usage of the Configuration DSL.
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Grammar
 
-## Code scaffolding
+The Configuration DSL follows a specific grammar to define configuration values. Below is the detailed grammar:
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Definition
 
-## Build
+A configuration definition consists of an optional `Type`, an optional `Multiplicity`, and `Properties`.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```
+Definition
+  = Type? Multiplicity? Properties
+```
 
-## Running unit tests
+### Type
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+The `Type` can be either "basic" or "domain". If not specified, the default type is "domain".
 
-## Running end-to-end tests
+```
+Type
+  = "basic"
+  | "domain"
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Multiplicity
 
-## Further help
+The `Multiplicity` can be either "single" or "multi". If not specified, the default multiplicity is "multi".
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+```
+Multiplicity
+  = "single"
+  | "multi"
+```
+
+### Properties
+
+The `Properties` are enclosed in curly braces `{}` and consist of one or more `Property` elements separated by commas.
+
+```
+Properties
+  = "{" Property ("," Property)* "}"
+```
+
+### Property
+
+A `Property` consists of a `name`, an optional `PropType`, an optional `Validation`, and optional nested `Properties`.
+
+```
+Property
+  = name PropType? Validation? Properties?
+```
+
+### Validation
+
+The `Validation` can specify that a property must not be null.
+
+```
+Validation
+  = "notnull"
+```
+
+### Literal
+
+A `literal` is a sequence of alphanumeric characters.
+
+```
+literal
+  = alnum*
+```
+
+### Name
+
+A `name` starts with a letter followed by zero or more alphanumeric characters.
+
+```
+name
+  = letter alnum*
+```
+
+### PropType
+
+A `PropType` can be either an `EnumType` or a `primitiveType`.
+
+```
+PropType
+  = EnumType
+  | primitiveType
+```
+
+### PrimitiveType
+
+A `primitiveType` can be one of the following: "string", "code", "number", "bool", or "multi".
+
+```
+primitiveType
+  = "string"
+  | "code"
+  | "number"
+  | "bool"
+  | "multi"
+```
+
+### EnumType
+
+An `EnumType` is a set of enum values enclosed in parentheses `()` and separated by commas.
+
+```
+EnumType
+  = "(" enumValue ("," enumValue)* ")"
+```
+
+### EnumValue
+
+An `enumValue` is a sequence of one or more alphanumeric characters.
+
+```
+enumValue
+  = alnum+
+```
+
+## Example Usage
+
+Here are some examples of how to use the Configuration DSL:
+
+### Example 1: Basic Single Property
+
+```
+basic single {
+  propertyName string
+}
+```
+
+### Example 2: Domain Multi Property with Validation
+
+```
+domain multi {
+  propertyName code notnull,
+  anotherProperty (value1, value2, value3)
+}
+```
+
+### Example 3: Nested Properties
+
+```
+basic single {
+  outerProperty string {
+    innerProperty number notnull,
+    anotherInnerProperty bool
+  }
+}
+```
+
+These examples illustrate the flexibility and conciseness of the Configuration DSL. By following the grammar rules and examples provided, you can create complex configuration values with ease.
