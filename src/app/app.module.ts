@@ -6,18 +6,20 @@ import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {ClarityModule} from "@clr/angular";
 import {EditorComponent} from "./editor/editor.component";
+import {NgOptimizedImage} from "@angular/common";
 
 @NgModule({
   declarations: [
     AppComponent,
     EditorComponent
   ],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    ClarityModule,
-    AppRoutingModule
-  ],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        ClarityModule,
+        AppRoutingModule,
+        NgOptimizedImage
+    ],
   providers: [],
   bootstrap: [AppComponent]
 })
