@@ -10,16 +10,64 @@ The Configuration DSL follows a specific grammar to define configuration values.
 
 ### Definition
 
-A configuration definition consists of an optional `Type`, an optional `Multiplicity`, and `Properties`.
+A configuration definition consists of an optional `Category`, an optional `ConfigKey`, zero or more `Modifiers`, and `Properties`.
 
 ```
 Definition
-  = Type? Multiplicity? Properties
+  = Category? ConfigKey? Modifier* Properties
+```
+
+### Category
+
+The `Category` is defined with the keyword "category" followed by a `key`.
+
+```
+Category
+  = "category" key
+```
+
+### ConfigKey
+
+The `ConfigKey` is defined with the keyword "key" followed by a `key`.
+
+```
+ConfigKey
+  = "key" key
+```
+
+### Key
+
+A `key` consists of one or more `key_fragments` separated by dots.
+
+```
+key
+  = key_fragment ("." key_fragment)*
+```
+
+### Key Fragment
+
+A `key_fragment` is a sequence of alphanumeric characters, hyphens, or underscores.
+
+```
+key_fragment
+  = (alnum | "-" | "_")+
+```
+
+### Modifier
+
+A `Modifier` can be one of the following types: `Type`, `Multiplicity`, `Visibility`, or `Editable`.
+
+```
+Modifier
+  = Type          -- type
+  | Multiplicity  -- multi
+  | Visibility    -- visible
+  | Editable      -- edit
 ```
 
 ### Type
 
-The `Type` can be either "basic" or "domain". If not specified, the default type is "domain".
+The `Type` can be either "basic" or "domain".
 
 ```
 Type
@@ -29,12 +77,45 @@ Type
 
 ### Multiplicity
 
-The `Multiplicity` can be either "single" or "multi". If not specified, the default multiplicity is "multi".
+The `Multiplicity` can be either "single" or "multi".
 
 ```
 Multiplicity
   = "single"
   | "multi"
+```
+
+### Visibility
+
+The `Visibility` is defined with the keyword "visible" followed by an `orgType`.
+
+```
+Visibility
+  = "visible" orgType
+```
+
+### Editable
+
+The `Editable` is defined with the keyword "edit" followed by an `orgType`.
+
+```
+Editable
+  = "edit" orgType
+```
+
+### OrgType
+
+The `orgType` can be one of the following: "country", "tenantgrp", "tenant", "companygrp", "legalorg", "sitegrp", or "site".
+
+```
+orgType
+  = "country"
+  | "tenantgrp"
+  | "tenant"
+  | "companygrp"
+  | "legalorg"
+  | "sitegrp"
+  | "site"
 ```
 
 ### Properties
@@ -94,7 +175,7 @@ PropType
 
 ### PrimitiveType
 
-A `primitiveType` can be one of the following: "string", "code", "number", "bool", or "multi".
+A `primitiveType` can be one of the following: "string", "code", "number", "bool", "multi", "text", or "ref".
 
 ```
 primitiveType
@@ -103,6 +184,8 @@ primitiveType
   | "number"
   | "bool"
   | "multi"
+  | "text"
+  | "ref"
 ```
 
 ### EnumType
@@ -152,6 +235,23 @@ basic single {
     innerProperty number notnull,
     anotherInnerProperty bool
   }
+}
+```
+
+### Example 4: Configuration with Category and Key
+
+```
+category myCategory key myKey {
+  propertyName text
+}
+```
+
+### Example 5: Configuration with Visibility and Editable Modifiers
+
+```
+visible tenant edit site {
+  propertyName string,
+  anotherProperty number notnull
 }
 ```
 
