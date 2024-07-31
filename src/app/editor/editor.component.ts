@@ -48,7 +48,7 @@ export class EditorComponent implements AfterViewInit {
         "start": [
           {
             token: "keyword",
-            regex: "\\b(?:basic|domain|single|multi|string|code|number|bool|notnull|multi)\\b"
+            regex: "\\b(?:basic|domain|single|multi|string|code|number|bool|notnull|multi|category|key|edit|visible)\\b"
           },
           {
             token: "paren.lparen",
